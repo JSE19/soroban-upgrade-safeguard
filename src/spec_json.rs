@@ -857,6 +857,23 @@ mod tests {
     }
 
     #[test]
+    fn lockfile_rejects_an_unsupported_schema_version() {
+        let spec = ContractSpec::from_entries(&[]);
+        let extracted = ExtractedSpec::new("test", &metadata(), &spec);
+        let mut lockfile = InterfaceLockfile::from_extracted(&extracted);
+        lockfile.lockfile_schema_version += 1;
+
+        let error = lockfile.to_contract_spec().unwrap_err();
+        assert!(error.contains("unsupported interface lockfile schema version"));
+    }
+
+    #[test]
+    fn lockfile_rejects_malformed_json() {
+        let error = InterfaceLockfile::from_json_str("{not json").unwrap_err();
+        assert!(error.contains("invalid interface lockfile JSON"));
+    }
+
+    #[test]
     fn env_meta_is_null_when_absent() {
         let value = serde_json::to_value(extracted(&[])).unwrap();
         assert_eq!(value["env_meta"], serde_json::Value::Null);
