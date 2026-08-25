@@ -171,11 +171,11 @@ pub use crate::remote::{
     default_cache_dir, fetch_verified, CacheStatus, FetchedArtifact, RemoteFetchConfig, RemoteRef,
 };
 pub use crate::report::{ReportedFinding, SafetyReport};
-pub use crate::spec_json::{InterfaceLockfile, INTERFACE_LOCKFILE_SCHEMA_VERSION};
 pub use crate::runtime_surface::{
     DataSegmentSummary, ElementSegmentSummary, GlobalDeclaration, MemoryDeclaration,
     RuntimeSurface, TableDeclaration,
 };
+pub use crate::spec_json::{InterfaceLockfile, INTERFACE_LOCKFILE_SCHEMA_VERSION};
 pub use crate::storage_schema::{
     SchemaFormat, StorageReconciliation, StorageSchema, StorageSchemaComparison,
 };

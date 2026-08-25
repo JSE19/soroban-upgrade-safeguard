@@ -230,9 +230,7 @@ impl InterfaceLockfile {
                 name,
                 ScSpecFunctionV0 {
                     doc: string_m(&function.doc, "function documentation")?,
-                    name: stellar_xdr::curr::ScSymbol(
-                        string_m(&function.name, "function name")?,
-                    ),
+                    name: stellar_xdr::curr::ScSymbol(string_m(&function.name, "function name")?),
                     inputs: vec_m(inputs, "function inputs")?,
                     outputs: vec_m(outputs, "function outputs")?,
                 },
@@ -317,7 +315,9 @@ impl InterfaceLockfile {
         for enumeration in &self.error_enums {
             let name = enumeration.name.clone();
             if spec.error_enums.contains_key(&name) {
-                return Err(format!("duplicate error enum '{name}' in interface lockfile"));
+                return Err(format!(
+                    "duplicate error enum '{name}' in interface lockfile"
+                ));
             }
             let cases = enumeration
                 .cases
@@ -643,9 +643,9 @@ impl SpecType {
                     "tuple values",
                 )?,
             })),
-            Self::BytesN { n } => ScSpecTypeDef::BytesN(
-                stellar_xdr::curr::ScSpecTypeBytesN { n: *n },
-            ),
+            Self::BytesN { n } => {
+                ScSpecTypeDef::BytesN(stellar_xdr::curr::ScSpecTypeBytesN { n: *n })
+            }
             Self::Udt { name } => ScSpecTypeDef::Udt(ScSpecTypeUdt {
                 name: string_m(name, "user-defined type name")?,
             }),

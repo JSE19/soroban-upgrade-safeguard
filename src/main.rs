@@ -623,9 +623,16 @@ fn run_lockfile(args: &LockfileArgs) -> Result<()> {
     let mut contents = serde_json::to_vec_pretty(&lockfile)?;
     contents.push(b'\n');
 
-    if let Some(parent) = args.output.parent().filter(|path| !path.as_os_str().is_empty()) {
+    if let Some(parent) = args
+        .output
+        .parent()
+        .filter(|path| !path.as_os_str().is_empty())
+    {
         std::fs::create_dir_all(parent).with_context(|| {
-            format!("Failed to create lockfile directory '{}'.", parent.display())
+            format!(
+                "Failed to create lockfile directory '{}'.",
+                parent.display()
+            )
         })?;
     }
     std::fs::write(&args.output, contents)
@@ -2023,12 +2030,8 @@ fn run_single(
     suppressions: &SuppressionConfig,
     progress: &dyn Fn(String),
 ) -> Result<()> {
-    if args.interface_lockfile.is_some() {
-        if args.wasm_paths.len() != 1 {
-            anyhow::bail!(
-                "--interface-lockfile requires exactly one candidate WASM path"
-            );
-        }
+    if args.interface_lockfile.is_some() && args.wasm_paths.len() != 1 {
+        anyhow::bail!("--interface-lockfile requires exactly one candidate WASM path");
     }
 
     let (old_source, new_wasm_path) = match (args.wasm_paths.len(), &args.contract_id) {
@@ -2116,7 +2119,10 @@ fn run_single(
 
         let safety_report = if let Some(lockfile_path) = &args.interface_lockfile {
             let lockfile_json = std::fs::read_to_string(lockfile_path).with_context(|| {
-                format!("Failed to read interface lockfile '{}'.", lockfile_path.display())
+                format!(
+                    "Failed to read interface lockfile '{}'.",
+                    lockfile_path.display()
+                )
             })?;
             progress(format!(
                 "\n🔒 Checking exported interface against {}...",

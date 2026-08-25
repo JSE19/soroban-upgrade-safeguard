@@ -235,8 +235,8 @@ fn lockfile_check_passes_for_matching_build_and_fails_for_drift() {
         .output()
         .expect("failed to check matching build");
     assert_eq!(matching.status.code(), Some(0));
-    let matching_json: Value = serde_json::from_slice(&matching.stdout)
-        .expect("matching lockfile check should emit JSON");
+    let matching_json: Value =
+        serde_json::from_slice(&matching.stdout).expect("matching lockfile check should emit JSON");
     assert_eq!(matching_json["is_safe"], Value::Bool(true));
 
     let drifting = bin()
@@ -248,8 +248,8 @@ fn lockfile_check_passes_for_matching_build_and_fails_for_drift() {
         .output()
         .expect("failed to check drifting build");
     assert_eq!(drifting.status.code(), Some(1));
-    let drifting_json: Value = serde_json::from_slice(&drifting.stdout)
-        .expect("drifting lockfile check should emit JSON");
+    let drifting_json: Value =
+        serde_json::from_slice(&drifting.stdout).expect("drifting lockfile check should emit JSON");
     assert_eq!(drifting_json["is_safe"], Value::Bool(false));
     assert!(drifting_json["counts"]["critical"].as_u64().unwrap() >= 1);
     fs::remove_file(path).unwrap();
