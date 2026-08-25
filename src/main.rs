@@ -1,7 +1,7 @@
 use anyhow::{Context, Result};
 use clap::{Args as ClapArgs, Parser, Subcommand, ValueEnum};
 use colored::Colorize;
-use std::io::IsTerminal;
+use std::io::{IsTerminal, Write};
 use std::path::{Path, PathBuf};
 #[allow(unused_imports)]
 use std::time::Duration;
@@ -822,6 +822,7 @@ fn run_verify_attestation(args: &VerifyAttestationArgs) -> Result<()> {
                 }],
             });
             println!("{}", serde_json::to_string_pretty(&result)?);
+            std::io::stdout().flush().ok();
             std::process::exit(1);
         }
     };
@@ -882,6 +883,7 @@ fn run_verify_attestation(args: &VerifyAttestationArgs) -> Result<()> {
     });
     println!("{}", serde_json::to_string_pretty(&result)?);
     if result["verified"] != true {
+        std::io::stdout().flush().ok();
         std::process::exit(1);
     }
     Ok(())
